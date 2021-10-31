@@ -1,0 +1,10 @@
+.node {
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+}
+.node-finish {
+  background-color: red;
+}
+.node-start {
+  background-color: blue;
+}
