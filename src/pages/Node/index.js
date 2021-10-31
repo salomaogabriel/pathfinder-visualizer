@@ -2,18 +2,33 @@ import React, { Component } from "react";
 import "./index.css";
 
 export default class Node extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
   render() {
-    const { isStart, isFinish } = this.props;
-    const extraClass = isFinish ? "node-finish" : isStart ? "node-start" : "";
-    return <div className={`node ${extraClass}`}></div>;
+    const {
+      col,
+      isFinish,
+      isStart,
+      isWall,
+      onMouseDown,
+      onMouseEnter,
+      onMouseUp,
+      row,
+    } = this.props;
+    const extraClassName = isFinish
+      ? "node-finish"
+      : isStart
+      ? "node-start"
+      : isWall
+      ? "node-wall"
+      : "";
+
+    return (
+      <div
+        id={`node-${row}-${col}`}
+        className={`node ${extraClassName}`}
+        onMouseDown={() => onMouseDown(row, col)}
+        onMouseEnter={() => onMouseEnter(row, col)}
+        onMouseUp={() => onMouseUp()}
+      ></div>
+    );
   }
 }
-
-export const DEFAULT_NODE = {
-  row: 0,
-  column: 0,
-};
