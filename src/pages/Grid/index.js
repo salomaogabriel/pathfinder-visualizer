@@ -41,7 +41,7 @@ export default class Grid extends Component {
     this.setState({ mouseIsPressed: false });
   }
 
-  animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
+  animateVisitedNodes(visitedNodesInOrder, nodesInShortestPathOrder) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
@@ -68,21 +68,24 @@ export default class Grid extends Component {
   }
 
   visualizeDijkstra() {
+    this.clearGrid(false);
     const { grid } = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     //runs algorithm
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    console.log(nodesInShortestPathOrder);
 
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    this.animateVisitedNodes(visitedNodesInOrder, nodesInShortestPathOrder);
   }
-  clearGrid() {
+  clearGrid(clearWalls = true) {
     const { grid } = this.state;
 
     for (let row = 0; row < grid.length; row++) {
       for (let col = 0; col < grid[row].length; col++) {
+        if (!clearWalls && grid[row][col].isWall) {
+          continue;
+        }
         document.getElementById(`node-${row}-${col}`).className = "node";
         grid[row][col] = createNode(col, row);
       }
@@ -107,7 +110,7 @@ export default class Grid extends Component {
         <div className="grid">
           {grid.map((row, rowIdx) => {
             return (
-              <div key={rowIdx}>
+              <div key={rowIdx} className="row">
                 {row.map((node, nodeIdx) => {
                   const { row, col, isFinish, isStart, isWall } = node;
                   return (
