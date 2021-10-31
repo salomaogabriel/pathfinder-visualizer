@@ -74,7 +74,26 @@ export default class Grid extends Component {
     //runs algorithm
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
+    console.log(nodesInShortestPathOrder);
+
     this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+  }
+  clearGrid() {
+    const { grid } = this.state;
+
+    for (let row = 0; row < grid.length; row++) {
+      for (let col = 0; col < grid[row].length; col++) {
+        document.getElementById(`node-${row}-${col}`).className = "node";
+        grid[row][col] = createNode(col, row);
+      }
+      this.setState({ grid: grid });
+    }
+    document.getElementById(
+      `node-${START_NODE_ROW}-${START_NODE_COL}`
+    ).className = "node node-start";
+    document.getElementById(
+      `node-${FINISH_NODE_ROW}-${FINISH_NODE_COL}`
+    ).className = "node node-finish";
   }
   render() {
     const { grid, mouseIsPressed } = this.state;
@@ -84,6 +103,7 @@ export default class Grid extends Component {
         <button onClick={() => this.visualizeDijkstra()}>
           Visualize Dijkstra's Algorithm
         </button>
+        <button onClick={() => this.clearGrid()}>Clear Grid</button>
         <div className="grid">
           {grid.map((row, rowIdx) => {
             return (
